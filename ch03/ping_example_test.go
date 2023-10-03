@@ -69,7 +69,7 @@ func ExamplePinger() {
 	// received "ping" (300ms)
 }
 
-// EXPECTED OUTPUT
+// EXPECTED OUTPUT WITH 'TESTING' IMPORTED
 // go test -v -timeout 300s -race -bench=. ./ch03/ping.go ./ch03/ping_example_test.go
 // === RUN   TestExamplePinger
 //     ping_example_test.go:40: Run 1:
