@@ -15,7 +15,24 @@ This is a collection of code examples ("tests") from the book <i>Network Program
 - `ch04` Sending TCP Data
 - `ch05` Unreliable UDP Communication
 
-## Notes on General Network Service Metrics
+## Notes
+
+The rest of this document consists of the following collections of notes:
+- [Network Programming with Go](#network-programming-with-go)
+  - [Chapter 4 notes](#chapter-4)
+- [General network service metrics](#notes-on-general-network-service-metrics)
+- [Useful Linux commands for troubleshooting](#notes-on-useful-linux-commands-for-troubleshooting)
+
+### Notes on Network Programming with Go
+
+#### Chapter 4
+
+- Using `net.Conn` interface is usually adequate and provides the best cross-platform support for TCP sessions.
+- Using `net.TCPConn` offers more fine-grained control but at the cost of some compatibility (i.e., functionality will very between OSes).
+  - Easiest way to access `net.TCPConn` object is by using a type assertion. This works for connections where the underlying network is TCP: 
+    `tcpConn, ok := conn.(*net.TCPConn)`
+
+### Notes on General Network Service Metrics
 
 The following notes are quoted from a different book, <i>Devops for the Desparate</i> by Bradley Smith.
 
@@ -35,7 +52,7 @@ The following notes are quoted from a different book, <i>Devops for the Desparat
 - Saturation: the extra work the system could not get to.
 - Errors: the number of errors a system is having.
 
-## Notes on Useful Linux Commands for Troubleshooting
+### Notes on Useful Linux Commands for Troubleshooting
 
 The following notes are quoted from a different book, <i>Devops for the Desparate</i> by Bradley Smith.
 
