@@ -32,7 +32,7 @@ func TestProxy(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	wg.Add((1)
+	wg.Add(1)
 
 	go func() {
 		defer wg.Done()

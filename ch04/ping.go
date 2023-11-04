@@ -9,14 +9,14 @@ import (
 )
 
 var (
-	count = flag.Int("c", 3, "number of pings: <= 0 means forever")
+	count    = flag.Int("c", 3, "number of pings: <= 0 means forever")
 	interval = flag.Duration("i", time.Second, "interval between pings")
-	timeout = flag.Duration("W", 5*time.Second, "time to wait for a reply")
+	timeout  = flag.Duration("W", 5*time.Second, "time to wait for a reply")
 )
 
 // Mimicking a subset of functionality provided by ping command on Linux.
 func init() {
-	flag.Usage - func() {
+	flag.Usage = func() {
 		fmt.Printf("Usage: %s [options] host:port\nOptions:\n", os.Args[0])
 		flag.PrintDefaults()
 	}
@@ -24,9 +24,9 @@ func init() {
 
 // Pinging a Host in ICMP-filtered Environments
 // CAVEAT: Sys admins could consider this abusive because we aren't
-// asking the remote host to simply send an echo reply using ICMP. 
-// Instead we're rapidly establishing/tearing down a TCP connection 
-// with every interval. This has more overhead so it should only be 
+// asking the remote host to simply send an echo reply using ICMP.
+// Instead we're rapidly establishing/tearing down a TCP connection
+// with every interval. This has more overhead so it should only be
 // used when intermediate firewalls filter ICMP and the sys admin permits.
 func main() {
 	flag.Parse()
