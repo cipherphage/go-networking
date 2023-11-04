@@ -19,8 +19,8 @@
 
 ## Run
 
-- Run all tests from the repository directory:  `go test -timeout 300s -race -bench=. ./...`.
-- Run specific test, for example,  `listen_test.go`: `go test -v -timeout 300s -race -bench=. ./ch03/listen_test.go`.
+- Run all tests from the repository directory:  `go test -timeout 300s -race -bench=. ./...`
+- Run specific test, for example,  `listen_test.go`: `go test -v -timeout 300s -race -bench=. ./ch03/listen_test.go`
 
 ## File Structure
 
