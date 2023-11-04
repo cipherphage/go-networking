@@ -1,13 +1,26 @@
 # Network Programming with Go
 
+## Contents
+- [Network Programming with Go](#network-programming-with-go)
+  - [Contents](#contents)
+  - [About](#about)
+  - [Run](#run)
+  - [File Structure](#file-structure)
+  - [Notes on Network Programming with Go](#notes-on-network-programming-with-go)
+    - [Chapter 4](#chapter-4)
+  - [Notes on General Network Service Metrics](#notes-on-general-network-service-metrics)
+  - [Notes on Useful Linux Commands for Troubleshooting](#notes-on-useful-linux-commands-for-troubleshooting)
+
 ## About
 
-This is a collection of code examples ("tests") from the book <i>Network Programming with Go</i> by Adam Woodbeck.
+- Code examples from the book <i>Network Programming with Go</i> by Adam Woodbeck. 
+- My notes from the book <i>Network Programming with Go</i> by Adam Woodbeck.
+- Some network troubleshooting notes from <i>Devops for the Desparate</i> by Bradley Smith.
 
 ## Run
 
-- Run all tests from the repository directory: `go test -timeout 300s -race -bench=. ./...`.
-- Run specific test, for example, `listen_test.go`: `go test -v -timeout 300s -race -bench=. ./ch03/listen_test.go`
+- Run all tests from the repository directory:  `go test -timeout 300s -race -bench=. ./...`.
+- Run specific test, for example,  `listen_test.go`: `go test -v -timeout 300s -race -bench=. ./ch03/listen_test.go`.
 
 ## File Structure
 
@@ -15,26 +28,18 @@ This is a collection of code examples ("tests") from the book <i>Network Program
 - `ch04` Sending TCP Data
 - `ch05` Unreliable UDP Communication
 
-## Notes
+## Notes on Network Programming with Go
 
-The rest of this document consists of the following collections of notes:
-- [Network Programming with Go](#network-programming-with-go)
-  - [Chapter 4 notes](#chapter-4)
-- [General network service metrics](#notes-on-general-network-service-metrics)
-- [Useful Linux commands for troubleshooting](#notes-on-useful-linux-commands-for-troubleshooting)
-
-### Notes on Network Programming with Go
-
-#### Chapter 4
+### Chapter 4
 
 - Using `net.Conn` interface is usually adequate and provides the best cross-platform support for TCP sessions.
 - Using `net.TCPConn` offers more fine-grained control but at the cost of some compatibility (i.e., functionality will very between OSes).
   - Easiest way to access `net.TCPConn` object is by using a type assertion. This works for connections where the underlying network is TCP: 
-    `tcpConn, ok := conn.(*net.TCPConn)`
+    - `tcpConn, ok := conn.(*net.TCPConn)`
 
-### Notes on General Network Service Metrics
+## Notes on General Network Service Metrics
 
-The following notes are quoted from a different book, <i>Devops for the Desparate</i> by Bradley Smith.
+The following notes are quoted from <i>Devops for the Desparate</i> by Bradley Smith.
 
 <i>Golden Signals</i>:
 - Latency: the time it takes for a service to process a request.
@@ -52,9 +57,9 @@ The following notes are quoted from a different book, <i>Devops for the Desparat
 - Saturation: the extra work the system could not get to.
 - Errors: the number of errors a system is having.
 
-### Notes on Useful Linux Commands for Troubleshooting
+## Notes on Useful Linux Commands for Troubleshooting
 
-The following notes are quoted from a different book, <i>Devops for the Desparate</i> by Bradley Smith.
+The following notes are quoted from <i>Devops for the Desparate</i> by Bradley Smith.
 
 <i>High load average</i>:
 - `uptime`.
@@ -66,11 +71,11 @@ The following notes are quoted from a different book, <i>Devops for the Desparat
 - `vmstat 1 5` \<parameter: delay in seconds\> \<parameter: count\>.
 - `ps -efly --sort=rss | head` \<flags: show all processes in long format, sort by resident set size (amount of non-swappable physical memory a process uses)\> \<pipe: `head` command (displays first ten lines by default)\>.
 
-<i>High iowait</i>:
+<i>High I/O wait</i>:
 - `iostat -xz 1 20` \<flags: show active devices with extended stat format\> \<parameter: delay in seconds\> \<parameter: count\>.
 - `iotop -oPab` \<flags: show processes performing I/O with accumulative stats in batch mode\>.
 
-<i>Hotname resolution failure</i>:
+<i>Hostname resolution failure</i>:
 - `/etc/resolv.conf`.
 - `resolvectl dns`.
 - `dig @<upstream dns ip> <hostname>`.
@@ -107,8 +112,6 @@ The following notes are quoted from a different book, <i>Devops for the Desparat
   - `/var/log/auth.log`
   - `/var/log/kern.log`
   - `/var/log/dmesg`
-
-
 
 <i>Miscellaneous</i>:
 - `strace -s 128 -p 19419` \<flags: message output size (128 bytes), specifies a process ID or PID\>, traces system calls and signals (note: this command can be very verbose and may cause performance issues).
