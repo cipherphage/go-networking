@@ -27,6 +27,7 @@
 - `ch03` Reliable TCP Data Streams
 - `ch04` Sending TCP Data
 - `ch05` Unreliable UDP Communication
+- `ch06` Ensuring UDP Reliability
 
 ## Notes on Network Programming with Go
 
@@ -36,6 +37,15 @@
 - Using `net.TCPConn` offers more fine-grained control but at the cost of some compatibility (i.e., functionality will very between OSes).
   - Easiest way to access `net.TCPConn` object is by using a type assertion. This works for connections where the underlying network is TCP: 
     - `tcpConn, ok := conn.(*net.TCPConn)`
+
+### Chapter 5
+
+- Be careful using the `net.Conn` interface for UDP because you may forget that you still have to manually handle things like checking the sender.
+
+### Chapter 6
+
+- TFTP, Trivial File Transfer Protocol, is an example of an applicaiton protocol that ensures reliable data transfers over UDP (see RFC 1350). The example TFTP server we write in this chapter only allows clients to download binary data. It does not support uploads, ASCII (American Standard Code for Information Interchange) transfers, or some of the later additions to TFTP specified outside RFC 1350.
+- "Please keep in mind that TFTP is not appropriate for secure file transmission. Though it adds reliability to UDP connections, it does not support encryption or authentication. If your application requires communication over UDP, you may want to use WireGuard ([https://github.com/WireGuard/wireguard-go/](https://github.com/WireGuard/wireguard-go/)), an application that allows for secure communication over UDP."
 
 ## Notes on General Network Service Metrics
 
