@@ -11,15 +11,15 @@ import (
 // types for our "read-only" (i.e., download-only) TFTP server
 
 const (
-	DatagramSize = 516 // the maximum supported datagram size
-	BlockSize = DatagramSize - 4 // the DatagramSize minus a 40byte header
+	DatagramSize = 516              // the maximum supported datagram size
+	BlockSize    = DatagramSize - 4 // the DatagramSize minus a 40byte header
 )
 
 type OpCode uint16
 
 const (
 	OpRRQ OpCode = iota + 1
-	_			// our server will be read-only so no WRQ support
+	_            // our server will be read-only so no WRQ support
 	OpData
 	OpAck
 	OpErr
@@ -40,7 +40,7 @@ const (
 
 type ReadReq struct {
 	Filename string
-	Mode 	 string
+	Mode     string
 }
 
 // Although not used by our server, a client would make use of this method.
@@ -88,7 +88,7 @@ func (q *ReadReq) UnmarshalBinary(p []byte) error {
 	r := bytes.NewBuffer(p)
 
 	var code OpCode
-	
+
 	err := binary.Read(r, binary.BigEndian, &code) // read operation code
 	if err != nil {
 		return err
@@ -132,7 +132,7 @@ type Data struct {
 }
 
 func (d *Data) MarshalBinary() ([]byte, error) {
-	b := new (bytes.Buffer)
+	b := new(bytes.Buffer)
 	b.Grow(DatagramSize)
 
 	d.Block++ // block numbers increment from 1
@@ -161,7 +161,7 @@ func (d *Data) UnmarshalBinary(p []byte) error {
 		return errors.New("invalid DATA")
 	}
 
-	var opcode
+	var opcode OpCode
 
 	err := binary.Read(bytes.NewReader(p[:2]), binary.BigEndian, &opcode)
 	if err != nil || opcode != OpData {

@@ -15,7 +15,7 @@ func TestListenPacketUDP(t *testing.T) {
 	}
 	defer cancel()
 
-	client err := net.ListenPacket("udp", "127.0.0.1:")
+	client, err := net.ListenPacket("udp", "127.0.0.1:")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func TestListenPacketUDP(t *testing.T) {
 	}
 	_ = interloper.Close()
 
-	if l := len(interrupt)); l != n {
+	if l := len(interrupt); l != n {
 		t.Fatalf("wrote %d bytes of %d", n, l)
 	}
 
