@@ -48,11 +48,14 @@
 
 - TFTP, Trivial File Transfer Protocol, is an example of an applicaiton protocol that ensures reliable data transfers over UDP (see RFC 1350). The example TFTP server we write in this chapter only allows clients to download binary data. It does not support uploads, ASCII (American Standard Code for Information Interchange) transfers, or some of the later additions to TFTP specified outside RFC 1350.
 - "Please keep in mind that TFTP is not appropriate for secure file transmission. Though it adds reliability to UDP connections, it does not support encryption or authentication. If your application requires communication over UDP, you may want to use WireGuard ([https://github.com/WireGuard/wireguard-go/](https://github.com/WireGuard/wireguard-go/)), an application that allows for secure communication over UDP."
-- Running the TFTP server
+- Running the TFTP server:
   - First start the server we made in chapter 6:
-  - ![TFTP server command line example](./ch06/server-tftp-example.jpg)
+  - ![TFTP server command line example.](./ch06/server-tftp-example.jpg)
   - Second start the TFTP server that is already extant on your local machine (or download one):
-  - ![TFTP client command line example](./ch06/client-tftp-example.jpg)
+  - ![TFTP client command line example.](./ch06/client-tftp-example.jpg)
+- Checksum notes: we do a SHA512/256 checksum which is a SHA512 checksum truncated to 256 bits because 1) calculating SHA512 on a 64-bit machine is faster (SHA256 uses 32-bit words), and 2) by truncating SHA512 to 256 bts we eliminate a length extension hashing attack that SHA512 is vulnerable to.
+- Running the checksum utility:
+  - ![Using the SHA512-256 checksum command line utility.](./ch06/checksum-example.jpg)
 
 ## Notes on General Network Service Metrics
 
