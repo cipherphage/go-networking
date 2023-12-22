@@ -57,7 +57,10 @@ func datagramEchoServer(ctx context.Context, network string, addr string) (net.A
 			<-ctx.Done()
 			_ = s.Close()
 			if network == "unixgram" {
-				_ = os.Remove(addr)
+				_ = os.Remove(addr) // Only net.Listen and net.ListenUnix will clean up
+				// the socket file automatically. We make sure to
+				// remove it so subsequent attempts to bind to it
+				// won't fail.
 			}
 		}()
 
