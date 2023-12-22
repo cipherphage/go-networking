@@ -10,6 +10,7 @@
     - [Chapter 4](#chapter-4)
     - [Chapter 5](#chapter-5)
     - [Chapter 6](#chapter-6)
+    - [Chapter 7](#chapter-7)
   - [Notes on General Network Service Metrics](#notes-on-general-network-service-metrics)
   - [Notes on Useful Linux Commands for Troubleshooting](#notes-on-useful-linux-commands-for-troubleshooting)
 
@@ -56,6 +57,13 @@
 - Checksum notes: we do a SHA512/256 checksum which is a SHA512 checksum truncated to 256 bits because 1) calculating SHA512 on a 64-bit machine is faster (SHA256 uses 32-bit words), and 2) by truncating SHA512 to 256 bts we eliminate a length extension hashing attack that SHA512 is vulnerable to.
 - Running the checksum utility:
   - ![Using the SHA512-256 checksum command line utility.](./ch06/checksum-example.jpg)
+
+### Chapter 7
+
+- <b><i>Unix domain socket</i></b>: a communication method that uses the filesystem to determine a packet's destination address, allowing services running on the same node to exchange data with one another, a process known as <i>inter-process communication</i> (IPC). There are three types:
+  - <i>Streaming sockets</i>: these operate like TCP and Go designates this type as `unix`.
+  - <i>Datagram sockets</i>: these operate like UDP and Go designates this type as `unixgram`.
+  - <i>Sequence sockets</i>: these combine elements of both TCP and UDP, and Go designates this type as `unixpacket`.
 
 ## Notes on General Network Service Metrics
 
