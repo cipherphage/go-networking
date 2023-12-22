@@ -8,6 +8,8 @@
   - [File Structure](#file-structure)
   - [Notes on Network Programming with Go](#notes-on-network-programming-with-go)
     - [Chapter 4](#chapter-4)
+    - [Chapter 5](#chapter-5)
+    - [Chapter 6](#chapter-6)
   - [Notes on General Network Service Metrics](#notes-on-general-network-service-metrics)
   - [Notes on Useful Linux Commands for Troubleshooting](#notes-on-useful-linux-commands-for-troubleshooting)
 
@@ -46,6 +48,11 @@
 
 - TFTP, Trivial File Transfer Protocol, is an example of an applicaiton protocol that ensures reliable data transfers over UDP (see RFC 1350). The example TFTP server we write in this chapter only allows clients to download binary data. It does not support uploads, ASCII (American Standard Code for Information Interchange) transfers, or some of the later additions to TFTP specified outside RFC 1350.
 - "Please keep in mind that TFTP is not appropriate for secure file transmission. Though it adds reliability to UDP connections, it does not support encryption or authentication. If your application requires communication over UDP, you may want to use WireGuard ([https://github.com/WireGuard/wireguard-go/](https://github.com/WireGuard/wireguard-go/)), an application that allows for secure communication over UDP."
+- Running the TFTP server
+  - First start the server we made in chapter 6:
+  - ![TFTP server command line example](./ch06/server-tftp-example.jpg)
+  - Second start the TFTP server that is already extant on your local machine (or download one):
+  - ![TFTP client command line example](./ch06/client-tftp-example.jpg)
 
 ## Notes on General Network Service Metrics
 
