@@ -64,6 +64,7 @@
   - <i>Streaming sockets</i>: these operate like TCP and Go designates this type as `unix`.
   - <i>Datagram sockets</i>: these operate like UDP and Go designates this type as `unixgram`.
   - <i>Sequence sockets</i>: these combine elements of both TCP and UDP, and Go designates this type as `unixpacket`.
+    - More specifically, these combine the session-oriented connections and reliability of TCP with the clearly delineated datagrams of UDP. However, sequence packet sockets discard unrequested data in each datagram. `unixpacket` has the least cross-platform support (e.g., Windows, WSL and macOS do not support them). Their hybrid behavior and discarding of unrequested data means `unix` and `unixgram` are better suited for most applications. `unixpacket` was largely used in old X.25 telecommunication networks, some types of financial transactions, and AX.25 (amateur radio).
 
 ## Notes on General Network Service Metrics
 

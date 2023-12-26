@@ -1,2 +1,4 @@
 github.com/awoodbeck/gnp v0.0.0-20231219000554-e28059e064cb h1:qyzCgnIyI3rDe/LmIYlgFq4v8i4cN9mZKtdMrH1VLSk=
 github.com/awoodbeck/gnp v0.0.0-20231219000554-e28059e064cb/go.mod h1:8tCrotdJfUpTvr7NvQ/He//i3UzL/A/zIwqpVl6iiPQ=
+golang.org/x/sys v0.15.0 h1:h48lPFYpsTvQJZF4EKyI4aLHaev3CxivZmv7yZig9pc=
+golang.org/x/sys v0.15.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=
