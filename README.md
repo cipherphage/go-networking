@@ -11,6 +11,7 @@
     - [Chapter 5](#chapter-5)
     - [Chapter 6](#chapter-6)
     - [Chapter 7](#chapter-7)
+    - [Chapter 8](#chapter-8)
   - [Notes on General Network Service Metrics](#notes-on-general-network-service-metrics)
   - [Notes on Useful Linux Commands for Troubleshooting](#notes-on-useful-linux-commands-for-troubleshooting)
 
@@ -31,6 +32,8 @@
 - `ch04` Sending TCP Data
 - `ch05` Unreliable UDP Communication
 - `ch06` Ensuring UDP Reliability
+- `ch07` Unix Domain Sockets
+- `ch08` Writing HTTP Clients
 
 ## Notes on Network Programming with Go
 
@@ -65,6 +68,16 @@
   - <i>Datagram sockets</i>: these operate like UDP and Go designates this type as `unixgram`.
   - <i>Sequence sockets</i>: these combine elements of both TCP and UDP, and Go designates this type as `unixpacket`.
     - More specifically, these combine the session-oriented connections and reliability of TCP with the clearly delineated datagrams of UDP. However, sequence packet sockets discard unrequested data in each datagram. `unixpacket` has the least cross-platform support (e.g., Windows, WSL and macOS do not support them). Their hybrid behavior and discarding of unrequested data means `unix` and `unixgram` are better suited for most applications. `unixpacket` was largely used in old X.25 telecommunication networks, some types of financial transactions, and AX.25 (amateur radio).
+
+### Chapter 8
+
+- Go HTTP client's implicit draining of the response body on closing could potentially bite you. For example, let's assume you send a GET request for a file and receive a response from the server. You read the response's `Content-Length` header and realize the file is much larger than you anticipated. If you close the response body without reading any of its bytes, Go will download the entire file from the server as it drains the body regardless. A better alternative would be to send a `HEAD` request to retrieve the `Content-Length` header.
+- On the rare occasion you make an HTTP request and want to explicitly drain the response body, the most efficient way is to use the `io.Copy` function:
+  ```go
+  _, _ = io.Copy(ioutil.Discard, response.Body)
+  _ = response.Close()
+  ```
+- You must close the response body no matter wheterh you read it or not in order to avoid resource leaks.
 
 ## Notes on General Network Service Metrics
 
