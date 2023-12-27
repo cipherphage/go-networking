@@ -78,6 +78,23 @@
   _ = response.Close()
   ```
 - You must close the response body no matter wheterh you read it or not in order to avoid resource leaks.
+- If you are in the middle of reading the response body when the context times out, your next read will immediately return an error. You can use generous time-out values or, alternatively create a context without a time-out or deadline and control the cancellation of the context exclusively by using a timer and the context's cancel function, like so:
+  ```go
+  ctx, cancel := context.WithCancel(context.Background())
+  timer := time.AfterFunc(5*time.Second, cancel)
+  // Make the HTTP request, read the response headers, etc.
+  // ...
+  // Add five more seconds before reading the response body.
+  timer.Reset(5*time.Second)
+  ```
+- Disabling persistent TCP connections: because the number of active TCP connections a computer can maintain is finite, you may inadvertantly deny your computer the ability to open new ones due to the fact that Go's HTTP client maintains the underlying TCP connection to a web server after reading its response, unless explicitly told to disconnect by the server. If you write a program that makes one-off requests to numerous web servers, you can find that your program stops working after exhausting all your computer's available TCP connections, leaving it unable to open new ones. Instead of disabling TCP session resuse in the client, a more flexible option is to inform the client what to do with the TCP socket on a per-request basis. For example:
+  ```go
+  req, err := http.NewRequestWithContext(ctx, http.MethodGet, ts.URL, nil)
+  if err != nil {
+    t.Fatal(err)
+  }
+  req.Close = true
+  ```
 
 ## Notes on General Network Service Metrics
 
