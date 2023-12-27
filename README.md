@@ -12,6 +12,7 @@
     - [Chapter 6](#chapter-6)
     - [Chapter 7](#chapter-7)
     - [Chapter 8](#chapter-8)
+    - [Chapter 9](#chapter-9)
   - [Notes on General Network Service Metrics](#notes-on-general-network-service-metrics)
   - [Notes on Useful Linux Commands for Troubleshooting](#notes-on-useful-linux-commands-for-troubleshooting)
 
@@ -96,6 +97,11 @@
   }
   req.Close = true
   ```
+
+### Chapter 9
+
+- We use the `html/template` package to create a template which automatically escapes HTML characters when you populate them and write the results to the response writer. This is important because otherwise the server we write in this chapter would be vulnerable to cross-site scripting attacks (XSS) where a request payload that includes JavaScript ends up running on a client's computer.
+- Use the `net/http/httptest` package to make unit-testing handlers painless and includes a test server implementation for performing integration tests.
 
 ## Notes on General Network Service Metrics
 
