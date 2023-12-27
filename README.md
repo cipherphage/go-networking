@@ -34,6 +34,7 @@
 - `ch06` Ensuring UDP Reliability
 - `ch07` Unix Domain Sockets
 - `ch08` Writing HTTP Clients
+- `ch09` Building HTTP Services
 
 ## Notes on Network Programming with Go
 

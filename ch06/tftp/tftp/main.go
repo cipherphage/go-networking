@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/awoodbeck/gnp/ch06/tftp"
+	"github.com/cipherphage/go-networking/ch06/tftp"
 )
 
 var (

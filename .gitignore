@@ -1,5 +1,7 @@
 # ignore local notes
 go_notes.txt
+# ignore local test tls certs
+*.pem
 
 # Binaries for programs and plugins
 *.exe
