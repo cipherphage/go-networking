@@ -15,7 +15,7 @@ import (
 func TestSimpleHTTPServer(t *testing.T) {
 	srv := &http.Server{
 		Addr:        "127.0.0.1:8443",
-		Handler:     http.TimeoutHandler(handlers.DefaultHandler(), 2*time.Minute, ""),
+		Handler:     http.TimeoutHandler(handlers.DefaultMethodsHandler(), 2*time.Minute, ""),
 		IdleTimeout: 5 * time.Minute,
 		ReadTimeout: time.Minute,
 	}
