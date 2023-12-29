@@ -104,31 +104,101 @@
 - Use the `net/http/httptest` package to make unit-testing handlers painless and includes a test server implementation for performing integration tests.
 - Potential pitfall: the order in which you write to the response body and set the response status code matters. The client receives the response status code first, followed by the response body from the server. If you write the response body first, Go infers that the response status code is 200 OK and sends it along to the client before sending the response body. See [pitfall_test.go]("https://github.com/cipherphage/go-networking/ch09/handlers/pitfall_test.go").
   - Run the pitfall test and you'll see that this logs `Response status: "200 OK"`:
-  ```go
-  handler := func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte("Bad request"))
-		w.WriteHeader(http.StatusBadRequest)
-	}
-	r := httptest.NewRequest(http.MethodGet, "http://test", nil)
-	w := httptest.NewRecorder()
-	handler(w, r)
-	t.Logf("Response status: %q", w.Result().Status)
-  ```
+    ```go
+    handler := func(w http.ResponseWriter, r *http.Request) {
+      _, _ = w.Write([]byte("Bad request"))
+      w.WriteHeader(http.StatusBadRequest)
+    }
+    r := httptest.NewRequest(http.MethodGet, "http://test", nil)
+    w := httptest.NewRecorder()
+    handler(w, r)
+    t.Logf("Response status: %q", w.Result().Status)
+    ```
   - Where as this logs `Response status: "400 Bad Request"`:
-  ```go
-  handler := func(w http.ResponseWriter, r *http.Request) {
-    w.WriteHeader(http.StatusBadRequest)
-		_, _ = w.Write([]byte("Bad request"))
-	}
-	r := httptest.NewRequest(http.MethodGet, "http://test", nil)
-	w := httptest.NewRecorder()
-	handler(w, r)
-	t.Logf("Response status: %q", w.Result().Status)
-  ```
+    ```go
+    handler := func(w http.ResponseWriter, r *http.Request) {
+      w.WriteHeader(http.StatusBadRequest)
+      _, _ = w.Write([]byte("Bad request"))
+    }
+    r := httptest.NewRequest(http.MethodGet, "http://test", nil)
+    w := httptest.NewRecorder()
+    handler(w, r)
+    t.Logf("Response status: %q", w.Result().Status)
+    ```
   - Note: the handlers above could be simplified using `http.Error` like this:
-  ```go
-  http.Error(w, "Bad request", http.StatusBadRequest)
-  ```
+    ```go
+    http.Error(w, "Bad request", http.StatusBadRequest)
+    ```
+- Dependency injection:
+  - Using a closure:
+    ```go
+    dbHandler := func(db *sql.DB) http.Handler {
+      return http.HandlerFunc(
+        func(w http.RepsonseWriter, r *http.Request) {
+          err := db.Ping()
+          // Do something with the database here...
+        },
+      )
+    }
+
+    http.Handle("/three", dbHandler(db))
+    ```
+  - Using a struct whose fields represent objects and data you want to access in your handler and define your handlers as struct methods:
+    ```go
+    type Handlers struct {
+      db *sql.DB
+      log *log.Logger
+    }
+
+    func (h *Handlers) Handler1() http.Handler {
+      return http.HandlerFunc(
+        func(w http.ResponseWriter, r *http.Request) {
+          err := h.db.Ping()
+          if err != nil {
+            h.log.Printf("db ping: %v", err)
+          }
+          // Do something with the database here...
+        },
+      )
+    }
+
+    func (h *Handlers) Handler2() http.Handler {
+      return http.HandlerFunc(
+        func(w http.ResponseWriter, r *http.Request) {
+          // ...
+        },
+      )
+    }
+
+    // Using the Handlers struct:
+
+    h := &Handlers{
+      db: db,
+      log: log.New(os.Stderr, "handlers: ", log.Lshortfile),
+    }
+    http.Handle("/one", h.Handler1())
+    http.Handle("/two", h.Handler2())
+    ```
+- Middleware: reusable functions that accept an `http.Handler` and return an `http.Handler` to collect metrics, log requests, control access to resources, require authentication, etc.
+  - A contrived example of middleware (ideally, you'd split this middleware into three separate middleware functions: response to the client, enforce response headers, and collect metrics):
+    ```go
+    func Middleware(next http.Handler) http.Handler {
+      return http.HandlerFunc(
+        func(w http.ResponseWriter, r *http.Request) {
+          if r.Method == http.MethodTrace {
+            http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+          }
+
+          w.Header().Set("X-Content-Type-Options", "nosniff")
+
+          start := time.Now()
+          next.ServeHTTP(w, r)
+          log.Printf("Next handler duration %v", time.Now().Sub(start))
+        },
+      )
+    }
+    ```
+  - Note: the `net/http` package includes useful middleware to serve static files, redirect requests, and manage request time-outs. 
 
 ## Notes on General Network Service Metrics
 
