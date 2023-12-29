@@ -102,6 +102,33 @@
 
 - We use the `html/template` package to create a template which automatically escapes HTML characters when you populate them and write the results to the response writer. This is important because otherwise the server we write in this chapter would be vulnerable to cross-site scripting attacks (XSS) where a request payload that includes JavaScript ends up running on a client's computer.
 - Use the `net/http/httptest` package to make unit-testing handlers painless and includes a test server implementation for performing integration tests.
+- Potential pitfall: the order in which you write to the response body and set the response status code matters. The client receives the response status code first, followed by the response body from the server. If you write the response body first, Go infers that the response status code is 200 OK and sends it along to the client before sending the response body. See [pitfall_test.go]("https://github.com/cipherphage/go-networking/ch09/handlers/pitfall_test.go").
+  - Run the pitfall test and you'll see that this logs `Response status: "200 OK"`:
+  ```go
+  handler := func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte("Bad request"))
+		w.WriteHeader(http.StatusBadRequest)
+	}
+	r := httptest.NewRequest(http.MethodGet, "http://test", nil)
+	w := httptest.NewRecorder()
+	handler(w, r)
+	t.Logf("Response status: %q", w.Result().Status)
+  ```
+  - Where as this logs `Response status: "400 Bad Request"`:
+  ```go
+  handler := func(w http.ResponseWriter, r *http.Request) {
+    w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte("Bad request"))
+	}
+	r := httptest.NewRequest(http.MethodGet, "http://test", nil)
+	w := httptest.NewRecorder()
+	handler(w, r)
+	t.Logf("Response status: %q", w.Result().Status)
+  ```
+  - Note: the handlers above could be simplified using `http.Error` like this:
+  ```go
+  http.Error(w, "Bad request", http.StatusBadRequest)
+  ```
 
 ## Notes on General Network Service Metrics
 
